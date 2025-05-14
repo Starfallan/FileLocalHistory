@@ -1,20 +1,27 @@
-# filelocalhistory README
+#  README
 
-This is the README for your extension "filelocalhistory". After writing up a brief description, we recommend including the following sections.
+Inspired by the robust Local History feature found in JetBrains IDEs like IntelliJ IDEA, this extension provides an automatic, independent record of changes made to your project files directly within Visual Studio Code.
+
+Unlike traditional version control systems (like Git), Local History continuously tracks your file modifications locally on your machine every time you save a document. This gives you a granular safety net for recent changes, allowing you to easily inspect or revert to previous versions of your files without needing to commit.
+
+Whether you need to recover from an accidental overwrite, review recent work before making a commit, or simply explore the evolution of a file, Local History offers a reliable and convenient solution integrated into your VS Code workflow.
+
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Automatic Tracking: Saves a history revision every time you save a file.
+- Independent History: Operates independently of Git or other version control systems.
+- Timeline View: Browse changes through a chronological history view.
+- File List: See which files were modified around specific points in time.
+- Integrated Diff: Easily compare the current version of a file with any historical revision.
+- Restore Files: Revert a file back to a selected historical state.
 
-For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Install Local History and add an essential layer of safety and recovery to your VS Code development environment!
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+No(⊙o⊙)？？
 
 ## Extension Settings
 

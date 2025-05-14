@@ -1,7 +1,7 @@
 {
   "name": "filelocalhistory",
   "displayName": "FileLocalHistory",
-  "description": "",
+  "description": "保存文件的本地历史记录，类似IDEA的Local History功能",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"
@@ -9,15 +9,155 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "filelocalhistory-explorer",
+          "title": "文件历史",
+          "icon": "resources/history.svg"
+        }
+      ]
+    },
+    "views": {
+      "filelocalhistory-explorer": [
+        {
+          "id": "filelocalhistoryView",
+          "name": "当前文件历史",
+          "icon": "resources/history.svg"
+        },
+        {
+          "id": "filelocalhistoryProjectView",
+          "name": "项目历史记录",
+          "icon": "resources/history.svg"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "filelocalhistory.helloWorld",
-        "title": "Hello World"
+        "command": "filelocalhistory.showHistory",
+        "title": "显示本地历史记录"
+      },
+      {
+        "command": "filelocalhistory.showHistoryForFile",
+        "title": "显示当前文件的本地历史记录"
+      },
+      {
+        "command": "filelocalhistory.showProjectHistory",
+        "title": "显示项目历史记录"
+      },
+      {
+        "command": "filelocalhistory.refreshProjectHistory",
+        "title": "刷新项目历史记录",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "filelocalhistory.compareWithPrevious",
+        "title": "比较与前一个版本的差异"
+      },
+      {
+        "command": "filelocalhistory.purgeHistory",
+        "title": "清理历史记录"
+      },
+      {
+        "command": "filelocalhistory.openFile",
+        "title": "打开文件",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "filelocalhistory.revealInExplorer",
+        "title": "在资源管理器中显示",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "filelocalhistory.filterProjectHistory",
+        "title": "筛选项目历史记录",
+        "icon": "$(filter)"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "filelocalhistory.showHistoryForFile",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "filelocalhistory.showHistoryForFile",
+          "group": "navigation"
+        },
+        {
+          "command": "filelocalhistory.compareWithPrevious",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "filelocalhistory.refreshProjectHistory",
+          "when": "view == filelocalhistoryProjectView",
+          "group": "navigation"
+        },
+        {
+          "command": "filelocalhistory.filterProjectHistory",
+          "when": "view == filelocalhistoryProjectView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "filelocalhistory.openFile",
+          "when": "view == filelocalhistoryProjectView && viewItem == projectHistoryItem",
+          "group": "inline"
+        },
+        {
+          "command": "filelocalhistory.revealInExplorer",
+          "when": "view == filelocalhistoryProjectView && viewItem == projectHistoryItem",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "文件本地历史记录",
+      "properties": {
+        "filelocalhistory.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用文件本地历史记录功能"
+        },
+        "filelocalhistory.maxHistoryFiles": {
+          "type": "number",
+          "default": 30,
+          "description": "每个文件保留的最大历史记录数量"
+        },
+        "filelocalhistory.maxAgeInDays": {
+          "type": "number",
+          "default": 7,
+          "description": "历史记录保留的最大天数"
+        },
+        "filelocalhistory.excludedFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/.git/**",
+            "**/node_modules/**",
+            "**/.history/**"
+          ],
+          "description": "不进行历史记录跟踪的文件或目录模式"
+        },
+        "filelocalhistory.historyPath": {
+          "type": "string",
+          "default": "",
+          "description": "历史记录的存储路径，留空将使用默认路径"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
@@ -34,16 +174,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
+    "@types/minimatch": "^5.1.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "esbuild": "^0.25.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "minimatch": "^10.0.1"
   }
 }
